@@ -1,12 +1,14 @@
 import "@/app/globals.css";
 import Carteirinha from "./Carteirinha";
-import { useState } from "react";
+import { useState, useRef } from "react";
+import { toPng } from "html-to-image";
 import McLovin from "@/assets/mcLovin.jpeg";
 
 export default function CarteirinhaSection() {
   const [image, setImage] = useState<string | null>(null);
   const [text, setText] = useState<string | null>(null);
   const [showInputs, setShowInputs] = useState(true);
+  const carteirinhaRef = useRef<HTMLDivElement | null>(null);
 
   const handleImageUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.files && event.target.files[0]) {
@@ -27,6 +29,23 @@ export default function CarteirinhaSection() {
     setShowInputs(true);
     setImage(null);
     setText(null);
+  };
+
+  const handleDownloadImage = () => {
+    if (carteirinhaRef.current === null) {
+      return;
+    }
+
+    toPng(carteirinhaRef.current)
+      .then((dataUrl) => {
+        const link = document.createElement("a");
+        link.href = dataUrl;
+        link.download = "carteirinha.png";
+        link.click();
+      })
+      .catch((err) => {
+        console.error("Erro ao gerar a imagem!", err);
+      });
   };
 
   return (
@@ -79,15 +98,21 @@ export default function CarteirinhaSection() {
         </div>
       ) : (
         <div className="my-4 flex flex-col justify-center items-center">
-          <Carteirinha 
-          picture={image!} 
-          name={text!} />
+          <div ref={carteirinhaRef}>
+            <Carteirinha picture={image!} name={text!} />
+          </div>
           <button
-              onClick={handleBack}
-              className="w-3/4 bg-red-500 text-white py-2 rounded-lg my-4 transition duration-300 ease-in-out hover:bg-red-600"
-            >
-              Voltar
-            </button>
+            onClick={handleBack}
+            className="w-3/4 bg-red-500 text-white py-2 rounded-lg my-4 transition duration-300 ease-in-out hover:bg-red-600"
+          >
+            Voltar
+          </button>
+          <button
+            onClick={handleDownloadImage}
+            className="w-3/4 bg-green-500 text-white py-2 rounded-lg my-4 transition duration-300 ease-in-out hover:bg-blue-600"
+          >
+            Baixar Carteirinha
+          </button>
         </div>
       )}
     </div>

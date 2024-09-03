@@ -1,8 +1,6 @@
 'use client'
 
-// import LiveStream from "@/components/LiveStream";
 import LiveStreamSection from "@/components/livestream/LiveStreamSection";
-import PlayerCard from "@/components/PlayerCard";
 import EstatisticasSection from "@/components/estatisticas/EstatisticasSection";
 import { useState } from "react";
 import CalendarioSection from "@/components/calendario/CalendarioSection";
@@ -21,21 +19,21 @@ export default function Home() {
             <div className="flex-shrink-0 flex space-x-4 mb-4 mt-4">
             <button 
                 onClick={() => setActivePage('estatisticas')}
-                className={`text-white hover:bg-white hover:text-black rounded-lg p-2 text-xl whitespace-nowrap transition duration-300 ease-in-out ${activePage === 'estatisticas' ? 'bg-white text-black' : ''}`}
+                className={`text-white hover:bg-white hover:text-black rounded-lg p-2 text-xl whitespace-nowrap transition duration-300 ease-in-out ${activePage == 'estatisticas' ? '!text-black bg-white' : ''}`}
               >
                 Estatísticas
               </button>
               <button 
                 onClick={() => setActivePage('carteirinha')}
-                className={`text-white hover:bg-white hover:text-black rounded-lg p-2 text-xl whitespace-nowrap transition duration-300 ease-in-out ${activePage === 'carteirinha' ? 'bg-white text-black' : ''}`}
+                className={`text-white hover:bg-white hover:text-black rounded-lg p-2 text-xl whitespace-nowrap transition duration-300 ease-in-out ${activePage == 'carteirinha' ? '!text-black bg-white' : ''}`}
               >
                 Carteirinha
               </button>
               <button 
                 onClick={() => setActivePage('calendario')}
-                className={`text-white hover:bg-white hover:text-black rounded-lg p-2 text-xl whitespace-nowrap transition duration-300 ease-in-out ${activePage === 'calendario' ? 'bg-white text-black' : ''}`}
+                className={`text-white hover:bg-white hover:text-black rounded-lg p-2 text-xl whitespace-nowrap transition duration-300 ease-in-out ${activePage == 'calendario' ? '!text-black bg-white' : ''}`}
               >
-                Calendario
+                Calendário
               </button>
             </div>
           </div>

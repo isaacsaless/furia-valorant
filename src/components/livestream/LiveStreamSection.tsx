@@ -4,49 +4,73 @@ import "@/app/globals.css";
 import LiveStream from "../LiveStream";
 import FuriaOffline from "@/components/livestream/FuriaOffline";
 import { FetchLiveStream } from "@/app/actions/fetchLiveStream";
+import FetchLatestVideo from "@/app/actions/fetchLatestVideo";
+
+interface StreamData {
+  liveStreamId: string | null;
+  latestVideoId: string | null;
+  error: string | null;
+  loading: boolean;
+}
 
 export default function LiveStreamSection() {
-  const [data, setData] = useState<any | null>(null);
-  const [error, setError] = useState<string | null>(null);
+  const [streamData, setStreamData] = useState<StreamData>({ 
+    liveStreamId: null, 
+    latestVideoId: null, 
+    error: null, 
+    loading: true 
+  });
+  const [showAlternativeComponent, setShowAlternativeComponent] = useState(false);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const result = await FetchLiveStream();
-        if (result.error) {
-          setError(result.error);
-          console.error('Error fetching data:', result.error);
-        } else {
-          setData(result.data);
-        }
+        const [liveStreamResult, latestVideoResult] = await Promise.all([
+          FetchLiveStream(),
+          FetchLatestVideo()
+        ]);
+
+        setStreamData({
+          liveStreamId: liveStreamResult.data,
+          latestVideoId: latestVideoResult.dataVideo,
+          error: liveStreamResult.error || null,
+          loading: false
+        });
       } catch (err) {
-        if (err instanceof Error) {
-          setError(err.message);
-          console.error('Unexpected error:', err);
-        } else {
-          setError('Unexpected error occurred.');
-          console.error('Unexpected error occurred:', err);
-        }
+        setStreamData({
+          liveStreamId: null,
+          latestVideoId: null,
+          error: err instanceof Error ? err.message : 'Unexpected error occurred.',
+          loading: false
+        });
+        console.error('Unexpected error:', err);
       }
     };
 
     fetchData();
   }, []);
 
-  if (error && error !== 'furia offline') {
+  if (streamData.loading) {
+    return <LoadingLive />;
+  }
+
+  if (streamData.error && streamData.error !== 'furia offline') {
     return <div>Aconteceu um erro inesperado ao tentar carregar a LiveStream</div>;
   }
 
-  if(error === 'furia offline'){
-    return <FuriaOffline/>;
-  }
-
-  if (!data || !data.players) {
-    return <LoadingLive/>;
+  if (streamData.error === 'furia offline') {
+    if (showAlternativeComponent) {
+      return <LiveStream videoId={streamData.latestVideoId || "-sE04n4KFr0"} />;
+    }
+    
+    return (
+      <div>
+        <FuriaOffline onButtonClick={() => setShowAlternativeComponent(true)} />
+      </div>
+    );
   }
 
   return (
-    <LiveStream
-    videoId={data}/>
+    <LiveStream videoId={streamData.liveStreamId || ""} />
   );
 }

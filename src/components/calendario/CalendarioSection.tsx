@@ -50,13 +50,12 @@ export default function EstatisticasSection() {
   }
 
   if (!data || !data.matches) {
-    return <div>Carregando...</div>;
+    return <div className="bg-bottom-bg text-white h-screen">Carregando...</div>;
   }
 
   return (
     <>
       {data.matches.length === 0 ? (
-        // <div>Erro: Sem jogadores disponíveis</div>
         <div className="bg-bottom-bg min-h-screen pb-20 text-white overflow-hidden">
           <SemJogos/>
         </div>

@@ -51,7 +51,7 @@ export default function EstatisticasSection() {
   }
 
   if (!data || !data.players) {
-    return <div>Carregando...</div>;
+    return <div className="bg-bottom-bg text-white h-screen">Carregando...</div>;
   }
 
   return (
@@ -59,6 +59,8 @@ export default function EstatisticasSection() {
       {data.players.length === 0 ? (
         <div>Erro: Sem jogadores disponíveis</div>
       ) : (
+        <div className="flex flex-col bg-bottom-bg">
+          <h1 className="text-white ml-4">Dados dos últimos <span className="border-b-2 border-blue-400">60 dias</span></h1>
         <div className="flex flex-row flex-wrap justify-center bg-bottom-bg pt-10">
           {data.players.map((player: Player) => {
             let picture = player.picture;
@@ -86,6 +88,7 @@ export default function EstatisticasSection() {
               />
             );
           })}
+        </div>
         </div>
       )}
     </>
