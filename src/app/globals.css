@@ -1,0 +1,30 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.custom-scrollbar::-webkit-scrollbar {
+    height: 6px; /* Altura da scrollbar */
+  }
+  
+  .custom-scrollbar::-webkit-scrollbar-thumb {
+    background-color: #888; /* Cor do thumb (a parte que você pode arrastar) */
+    border-radius: 10px; /* Bordas redondas */
+  }
+  
+  .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+    background-color: #555; /* Cor do thumb ao passar o mouse */
+  }
+  
+  .custom-scrollbar::-webkit-scrollbar-track {
+    background: transparent; /* Background transparente */
+  }
+
+  .carteirinha{
+    height: 600px;
+  }
+
+  @media (max-width: 640px) {
+    .carteirinha {
+        height: 100vh;
+    }
+}
